@@ -10,7 +10,7 @@ my $version = "1.2";
 my $dir = dir("data");
 my $file = $dir->file("scores.txt");
 my $subname = shift; 
-cmd_go() unless defined $subname;
+cmd_run() unless defined $subname;
 $subname =~ s/-/_/g;
 my $sub = main->can("cmd_$subname") || main->can("tool_$subname") || main->can("hid_$subname");
 if (!defined($sub))
@@ -24,7 +24,7 @@ else
     exit 0;
 }
 # Main command
-sub cmd_go()
+sub cmd_run()
 {
     my $fh = $file->openw(); 
 	print "\e[2J\e[0G\e[0d"; # J = Erase in Display, 2 = Entire Screen, (G, d) = Move cursor to (..,..)
@@ -63,7 +63,7 @@ sub cmd_help()
     print "To get right into using skore, simply type ",color('bright_green'),"./skore",color('reset'),"\n";
     print "For details about skore, such as version, use ",color('bright_green'),"./skore pkg",color('reset'),"\n";
     print "--- Basic Commands ---\n";
-	print color('yellow'),"go",color('reset')," -  This command will start skore. (default)\n";
+	print color('yellow'),"run",color('reset')," -  This command will start skore. (default)\n";
 	print color('yellow'),"last",color('reset')," - list the last game and players/scores recorded.\n";
 	print "--- Tool Commands ---\n";
 	print color('yellow'),"pkg",color('reset')," - prints script version and kernal version\n";
