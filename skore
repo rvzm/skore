@@ -1,0 +1,106 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use Path::Class;
+use Term::ANSIColor;
+use autodie;
+
+my $version = "1.2";
+my $dir = dir("data");
+my $file = $dir->file("scores.txt");
+my $subname = shift; 
+cmd_go() unless defined $subname;
+$subname =~ s/-/_/g;
+my $sub = main->can("cmd_$subname") || main->can("tool_$subname") || main->can("hid_$subname");
+if (!defined($sub))
+{
+    print STDERR "Invalid command given.\nUse ",color('bright_green'),"./skore help",color('reset')," for a list of commands.\n";
+    exit 1;
+}
+else
+{
+    $sub->(@ARGV);
+    exit 0;
+}
+# Main command
+sub cmd_go()
+{
+    my $fh = $file->openw(); 
+	print "\e[2J\e[0G\e[0d"; # J = Erase in Display, 2 = Entire Screen, (G, d) = Move cursor to (..,..)
+    print "••••••••••••••••••••\n";
+    print "• Welcome to ",color('bright_red'),"skore",color('reset')," •\n";
+    print "••••••••••••••••••••\n\n";
+    my @game = prompt("What game are we scoring?\n");
+	$fh->print("--- Game ---\n",color('bright_green'),"@game",color('reset'),"\n--- Scores ---\n");
+    print "••• Game name locked: @game\n\n";
+    my $players= prompt("Enter total number of players:\n");
+    my @players_list;
+    for(my $i=0;$i<$players;$i++){
+		push(@players_list , prompt("Enter Player ".($i+1)." name\n"));
+    print "\n";
+    }
+    for(my $i=0;$i<$players;$i++){
+		print $players_list[$i]."\t";
+    }
+    print "\n\n";
+    my @players_score;
+    for(my $i=0;$i<$players;$i++){
+		push(@players_score, prompt("score for $players_list[$i]?\n"));
+    }
+    print "\n";
+    print "••• Game: @game\n";
+    for(my $i=0;$i<$players;$i++){
+		print "$players_list[$i]\n";
+		print "••••• ",color('bright_green'),"$players_score[$i]",color('reset'),"\n";
+		$fh->print("$players_list[$i] - ",color('bright_green'),"$players_score[$i]",color('reset'),"\n");
+		}
+    exit 1;
+}
+sub cmd_help()
+{
+    print "Welcome to ",color('bright_red'),"skore",color('reset'),"\n";
+    print "To get right into using skore, simply type ",color('bright_green'),"./skore",color('reset'),"\n";
+    print "For details about skore, such as version, use ",color('bright_green'),"./skore pkg",color('reset'),"\n";
+    print "--- Basic Commands ---\n";
+	print color('yellow'),"go",color('reset')," -  This command will start skore. (default)\n";
+	print color('yellow'),"last",color('reset')," - list the last game and players/scores recorded.\n";
+	print "--- Tool Commands ---\n";
+	print color('yellow'),"pkg",color('reset')," - prints script version and kernal version\n";
+}
+sub tool_pkg()
+{
+    print color('bright_red'),"skore",color('reset')," version: $version\n";
+    print "Detected OS: ";
+    exec "uname -r";
+}
+sub cmd_last()
+{
+   my $contect = $file->slurp();
+   my $fh = $file->openr();
+	 print "\e[2J\e[0G\e[0d";
+   print "--- Last recorded scores ---\n\n";
+	 while( my $line = $fh->getline() ) {
+	 print $line;
+	 }
+	 print "--- End of scores ---\n"
+}
+sub prompt {
+    my ($query) = @_; # take a prompt string as argument
+    local $| = 1; # activate autoflush to immediately show the prompt 
+    print $query;
+    chomp(my $answer = <STDIN>); return $answer;
+}
+sub prompt_num {
+    NSTART:
+    my ($querynum) = @_;
+    print $querynum;
+    chomp(my $pnum = <STDIN>);
+    if ($pnum eq $pnum+0) { return $pnum; }
+    else { print "Error: That is not a number. Try again.\n"; goto NSTART; }
+}
+sub prompt_yn {
+    my ($queryyn) = @_;
+    my $answer = prompt("$queryyn (y/N): ");
+    return lc($answer) eq 'y';
+}

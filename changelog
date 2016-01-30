@@ -1,0 +1,12 @@
+CHANGELOG for skore
+
+-- RANT
+Somehow, the Github program spazzed out, and so we had to delete the entire repo and re-create.
+
+-- TODO
+ - add option to not save game/scores to file
+
+-- 1.2
+ - Updated from terminal color codes to ANSIColor
+ - Instead of being limited to 3 players, you will now be asked how many players there are
+ - Added command "last" which will display the last game you scored, along with the players and their scores.
