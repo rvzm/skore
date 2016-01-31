@@ -1,10 +1,9 @@
-CHANGELOG for skore
-
--- RANT
-Somehow, the Github program spazzed out, and so we had to delete the entire repo and re-create.
-
 -- TODO
- - add option to not save game/scores to file
+ - add option to not save game/scores to file (ID: 001A)
+
+-- 1.2.1
+ - Added helpful comments for each subroutine.
+ - Fixed player number request to use prompt_num to get a numeric value
 
 -- 1.2
  - Updated from terminal color codes to ANSIColor

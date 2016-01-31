@@ -7,8 +7,7 @@ use Term::ANSIColor;
 use autodie;
 
 my $version = "1.2";
-my $dir = dir("data");
-my $file = $dir->file("scores.txt");
+my $file = file("scores.txt");
 my $subname = shift; 
 cmd_run() unless defined $subname;
 $subname =~ s/-/_/g;
@@ -34,7 +33,7 @@ sub cmd_run()
     my @game = prompt("What game are we scoring?\n");
 	$fh->print("--- Game ---\n",color('bright_green'),"@game",color('reset'),"\n--- Scores ---\n");
     print "••• Game name locked: @game\n\n";
-    my $players= prompt("Enter total number of players:\n");
+    my $players= prompt_num("Enter total number of players:\n");
     my @players_list;
     for(my $i=0;$i<$players;$i++){
 		push(@players_list , prompt("Enter Player ".($i+1)." name\n"));
@@ -74,6 +73,7 @@ sub tool_pkg()
     print "Detected OS: ";
     exec "uname -r";
 }
+# ./skore last - displays last recorded scores.
 sub cmd_last()
 {
    my $contect = $file->slurp();
@@ -85,6 +85,8 @@ sub cmd_last()
 	 }
 	 print "--- End of scores ---\n"
 }
+
+# prompt commands - needed for cmd_run
 sub prompt {
     my ($query) = @_; # take a prompt string as argument
     local $| = 1; # activate autoflush to immediately show the prompt 
