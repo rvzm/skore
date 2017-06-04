@@ -9,13 +9,16 @@ use autodie;
 my $version = "1.2";
 my $file = file("scores.txt");
 my $subname = shift; 
-cmd_run() unless defined $subname;
 $subname =~ s/-/_/g;
 my $sub = main->can("cmd_$subname") || main->can("tool_$subname") || main->can("hid_$subname");
 if (!defined($sub))
 {
     print STDERR "Invalid command given.\nUse ",color('bright_green'),"./skore help",color('reset')," for a list of commands.\n";
     exit 1;
+}
+elsif (!defined($subname))
+{
+	cmd_run();
 }
 else
 {
