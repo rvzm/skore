@@ -4,34 +4,20 @@ use strict;
 use warnings;
 use Path::Class;
 use Term::ANSIColor;
+use Scalar::Util qw(looks_like_number);
 use autodie;
-
-my $version = "1.2";
+my $version = "1.2.2";
 my $file = file("scores.txt");
 my $subname = shift; 
 $subname =~ s/-/_/g;
-my $sub = main->can("cmd_$subname") || main->can("tool_$subname") || main->can("hid_$subname");
-if (!defined($sub))
-{
-    print STDERR "Invalid command given.\nUse ",color('bright_green'),"./skore help",color('reset')," for a list of commands.\n";
-    exit 1;
-}
-elsif (!defined($subname))
-{
-	cmd_run();
-}
-else
-{
-    $sub->(@ARGV);
-    exit 0;
-}
+
 # Main command
 sub cmd_run()
 {
     my $fh = $file->openw(); 
 	print "\e[2J\e[0G\e[0d"; # J = Erase in Display, 2 = Entire Screen, (G, d) = Move cursor to (..,..)
     print "••••••••••••••••••••\n";
-    print "• Welcome to ",color('bright_red'),"skore",color('reset')," •\n";
+    print "• Welcome to ",color('cyan'),"skore",color('reset')," •\n";
     print "••••••••••••••••••••\n\n";
     my @game = prompt("What game are we scoring?\n");
 	$fh->print("--- Game ---\n",color('bright_green'),"@game",color('reset'),"\n--- Scores ---\n");
@@ -48,7 +34,7 @@ sub cmd_run()
     print "\n\n";
     my @players_score;
     for(my $i=0;$i<$players;$i++){
-		push(@players_score, prompt("score for $players_list[$i]?\n"));
+		push(@players_score, prompt_num("score for $players_list[$i]?\n"));
     }
     print "\n";
     print "••• Game: @game\n";
@@ -61,7 +47,7 @@ sub cmd_run()
 }
 sub cmd_help()
 {
-    print "Welcome to ",color('bright_red'),"skore",color('reset'),"\n";
+    print "Welcome to ",color('cyan'),"skore",color('reset'),"\n";
     print "To get right into using skore, simply type ",color('bright_green'),"./skore",color('reset'),"\n";
     print "For details about skore, such as version, use ",color('bright_green'),"./skore pkg",color('reset'),"\n";
     print "--- Basic Commands ---\n";
@@ -72,21 +58,20 @@ sub cmd_help()
 }
 sub tool_pkg()
 {
-    print color('bright_red'),"skore",color('reset')," version: $version\n";
-    print "Detected OS: ";
-    exec "uname -r";
+    print color('cyan'),"skore",color('reset')," version: ",$version,"\n";
+	print color('cyan'),"Perl ",color('reset');
+	exec "perl -V:version";
 }
 # ./skore last - displays last recorded scores.
 sub cmd_last()
 {
-   my $contect = $file->slurp();
-   my $fh = $file->openr();
-	 print "\e[2J\e[0G\e[0d";
-   print "--- Last recorded scores ---\n\n";
-	 while( my $line = $fh->getline() ) {
-	 print $line;
-	 }
-	 print "--- End of scores ---\n"
+	my $contect = $file->slurp();
+	my $fh = $file->openr();
+	print "--- Last recorded scores ---\n\n";
+	while( my $line = $fh->getline() ) {
+		print $line;
+		}
+	print "--- End of scores ---\n"
 }
 
 # prompt commands - needed for cmd_run
@@ -101,11 +86,25 @@ sub prompt_num {
     my ($querynum) = @_;
     print $querynum;
     chomp(my $pnum = <STDIN>);
-    if ($pnum eq $pnum+0) { return $pnum; }
+    if (looks_like_number($pnum)) { return $pnum; }
     else { print "Error: That is not a number. Try again.\n"; goto NSTART; }
 }
 sub prompt_yn {
     my ($queryyn) = @_;
     my $answer = prompt("$queryyn (y/N): ");
     return lc($answer) eq 'y';
+}
+
+
+cmd_run() unless defined $subname;
+my $sub = main->can("cmd_$subname") || main->can("tool_$subname") || main->can("hid_$subname");
+if (!defined($sub))
+{
+    print STDERR "Invalid command given.\nUse ",color('bright_green'),"./skore help",color('reset')," for a list of commands.\n";
+    exit 1;
+}
+else
+{
+    $sub->(@ARGV);
+    exit 0;
 }
