@@ -1,5 +1,11 @@
 -- TODO
  - add option to not save game/scores to file (ID: 001A)
+ - add option to name score file on run (ID: 002A)
+
+-- 1.2.2
+ - fixed "too early to check prototype" error
+ - fixed prompt_num()
+ - added 'Scalar::Util qw(looks_like_number)' to use list
 
 -- 1.2.1
  - Added helpful comments for each subroutine.
