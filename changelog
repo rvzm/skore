@@ -2,6 +2,11 @@
  - add option to not save game/scores to file (ID: 001A)
  - add option to name score file on run (ID: 002A)
 
+-- Version Skip: 1.2.2 -> 1.2
+ - added option to make save file
+ - added option to select save file for `last` option
+ - changed `pkg` option output
+
 -- 1.2.2
  - fixed "too early to check prototype" error
  - fixed prompt_num()
