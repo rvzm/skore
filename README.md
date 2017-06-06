@@ -1,7 +1,7 @@
 # skore
 Score keeping script made in perl
 
-Current Version: 1.2.3
+Current Version: 1.3
 
 REQUIRMENTS
  libpath-class-perl
