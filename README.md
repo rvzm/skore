@@ -15,16 +15,16 @@ Usage:
 
 3. type chmod a+x skore
 
-4. type ./skore
+4. type `./skore`
 
 5. answer the questions it asks.
 
 
-For a list of commands you can use, type ./skore help
+For a list of commands you can use, type `./skore help`
 
 == Commands / Options
 
-to use the default option, simply type ./skore
+to use the default option, simply type `./skore`
 
 The options are as follows
 
