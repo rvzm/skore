@@ -1,9 +1,11 @@
 # skore
 Score keeping script made in perl
 
-Current Version: 1.2
+Current Version: 1.2.3
 
-REQUIRES: libpath-class-perl
+REQUIRMENTS
+ libpath-class-perl
+ libcurses-perl
 
 Usage:
 
@@ -19,3 +21,17 @@ Usage:
 
 
 For a list of commands you can use, type ./skore help
+
+== Commands / Options
+
+to use the default option, simply type ./skore
+
+The options are as follows
+
+the `pkg` option shows information about your system and the script
+
+the `last` option shows the last score data
+
+the `mksave` option allows you to select the save data name and location
+
+the `run` option runs the script with default options
