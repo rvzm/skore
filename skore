@@ -6,7 +6,10 @@ use Path::Class;
 use Term::ANSIColor;
 use Scalar::Util qw(looks_like_number);
 use autodie;
-my $version = "1.2.2";
+use Curses::UI;
+
+# basic variables
+my $version = "1.3";
 my $file = file("scores.txt");
 my $subname = shift; 
 $subname =~ s/-/_/g;
@@ -16,9 +19,10 @@ sub cmd_run()
 {
     my $fh = $file->openw(); 
 	print "\e[2J\e[0G\e[0d"; # J = Erase in Display, 2 = Entire Screen, (G, d) = Move cursor to (..,..)
-    print "••••••••••••••••••••\n";
-    print "• Welcome to ",color('cyan'),"skore",color('reset')," •\n";
-    print "••••••••••••••••••••\n\n";
+    print "•••••••••\n";
+    print "• ",color('cyan'),"skore",color('reset')," •\n";
+    print "•••••••••\n";
+	print "v",$version,"\n\nThis script tracks scores for players. \n\n";
     my @game = prompt("What game are we scoring?\n");
 	$fh->print("--- Game ---\n",color('bright_green'),"@game",color('reset'),"\n--- Scores ---\n");
     print "••• Game name locked: @game\n\n";
@@ -61,6 +65,16 @@ sub tool_pkg()
     print color('cyan'),"skore",color('reset')," version: ",$version,"\n";
 	print color('cyan'),"Perl ",color('reset');
 	exec "perl -V:version";
+}
+sub tool_mksave()
+{
+	my $cui = new Curses::UI;
+	my $cfile = $cui->savefilebrowser( -title => 'Save Scores Data as:',
+									-file => 'scores.txt',
+									-editfilename => 'true', );
+	exec "clear";
+	print "\e[2J\e[0G\e[0d";
+	cmd_run()
 }
 # ./skore last - displays last recorded scores.
 sub cmd_last()
