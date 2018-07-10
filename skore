@@ -8,126 +8,135 @@ use autodie;
 
 # basic variables
 my $version = "1.3";
-my $file = "scores.txt";
+my $file    = "scores.txt";
 my $fh;
 my $players;
 my $game;
 my @players_list;
 my @players_score;
-my $subname = $ARGV[0];
+my $subname;
 
 # Main command
-sub cmd_run()
-{
-	open FILE, '<', $file or die "Could not open file '$file' $!";
-	print "\e[2J\e[0G\e[0d"; # J = Erase in Display, 2 = Entire Screen, (G, d) = Move cursor to (..,..)
+sub cmd_run() {
+    open FILE, '<', $file or die "Could not open file '$file' $!";
+	# system "clear";
     print "•••••••••\n";
-    print "• ",color('cyan'),"skore",color('reset')," •\n";
+    print "• ", color('cyan'), "skore", color('reset'), " •\n";
     print "•••••••••\n";
-	print "v",$version,"\n\nThis script tracks scores for players. \n\n";
+    print "v", $version, "\n\nThis script tracks scores for players. \n\n";
     my $game = prompt("What game are we scoring?\n");
-	print $fh "--- Game ---\n",color('bright_green'),$game,color('reset'),"\n--- Scores ---\n";
-    print "••• Game name locked: ",$game,"\n\n";
+    print "••• Game name locked: ", $game, "\n\n";
     my $players = prompt_num("Enter total number of players:\n");
     my @players_list;
-    for(my $i=0;$i<$players;$i++){
-		push(@players_list , prompt("Enter Player ".($i+1)." name\n"));
-    print "\n";
+
+    for ( my $i = 0 ; $i < $players ; $i++ ) {
+        push( @players_list,
+            prompt( "Enter Player " . ( $i + 1 ) . " name\n" ) );
+        print "\n";
     }
-    for(my $i=0;$i<$players;$i++){
-		print $players_list[$i]."\t";
+    for ( my $i = 0 ; $i < $players ; $i++ ) {
+        print $players_list[$i] . "\t";
     }
     print "\n\n";
-	res_init();
+    res_init();
 }
-sub cmd_help()
-{
-    print "Welcome to ",color('cyan'),"skore",color('reset'),"\n";
-    print "To get right into using skore, simply type ",color('bright_green'),"./skore",color('reset'),"\n";
-    print "For details about skore, such as version, use ",color('bright_green'),"./skore pkg",color('reset'),"\n";
+
+sub cmd_help() {
+    print "Welcome to ", color('cyan'), "skore", color('reset'), "\n";
+    print "To get right into using skore, simply type ", color('bright_green'),
+      "./skore", color('reset'), "\n";
+    print "For details about skore, such as version, use ",
+      color('bright_green'), "./skore pkg", color('reset'), "\n";
     print "--- Basic Commands ---\n";
-	print color('yellow'),"run",color('reset')," -  This command will start skore. (default)\n";
-	print color('yellow'),"last",color('reset')," - list the last game and players/scores recorded.\n";
-	print "--- Tool Commands ---\n";
-	print color('yellow'),"pkg",color('reset')," - prints script version and kernal version\n";
+    print color('yellow'), "run", color('reset'),
+      " -  This command will start skore. (default)\n";
+    print color('yellow'), "last", color('reset'),
+      " - list the last game and players/scores recorded.\n";
+    print "--- Tool Commands ---\n";
+    print color('yellow'), "pkg", color('reset'),
+      " - prints script version and kernal version\n";
 }
-sub tool_pkg()
-{
-    print color('cyan'),"skore",color('reset')," version: ",$version,"\n";
-	print color('cyan'),"Perl ",color('reset');
-	exec "perl -V:version";
+
+sub tool_pkg() {
+    print color('cyan'), "skore", color('reset'), " version: ", $version, "\n";
+    print color('cyan'), "Perl ", color('reset');
+    exec "perl -V:version";
 }
-sub res_init()
-{
-	RETRY:
-	print "The following commands can be used:\n";
-	print "S - enter scores for players\n";
-	print "L - list current scorecard\n";
-	print "Q - Quit the scorekeeper after displaying score totals.\n";
-	my $gcmd = prompt("Enter your command:");
-	if ($gcmd == "s") {
-		cmd_enterscore();
-		}
-	elsif ($gcmd == "l") {
-		cmd_listscore();
-	}
-	elsif ($gcmd == "q") {
-		cmd_endgame();
-	}
-	elsif ($gcmd == "") {
-		goto RETRY;
+
+sub res_init() {
+  RETRY:
+    print "The following commands can be used:\n";
+    print "S - enter scores for players\n";
+    print "L - list current scorecard\n";
+    print "Q - Quit the scorekeeper after displaying score totals.\n";
+    my $gcmd = prompt("Enter your command:");
+    if ( $gcmd = "s" ) {
+        cmd_enterscore();
+    }
+    elsif ( $gcmd = "l" ) {
+        cmd_listscore();
+    }
+    elsif ( $gcmd = "q" ) {
+        cmd_endgame();
+    }
+    elsif ( $gcmd == "" ) {
+        goto RETRY;
+    }
 }
-sub cmd_enterscore()
-{
+
+sub cmd_enterscore() {
     my @players_score;
-    for(my $i=0;$i<$players;$i++){
-		push(@players_score, prompt_num("score for $players_list[$i]?\n"));
+    for ( my $i = 0 ; $i < $players ; $i++ ) {
+        push( @players_score, prompt_num("score for $players_list[$i]?\n") );
     }
     print "\n";
 }
-sub cmd_listscore()
-{
-	print "••• Game: $game\n";
-    for(my $i=0;$i<$players;$i++){
-		print "$players_list[$i]\n";
-		print $fh "••• Game: $game\n";
-		print "••••• ",color('bright_green'),"$players_score[$i]",color('reset'),"\n";
-		print $fh "$players_list[$i] - ",color('bright_green'),"$players_score[$i]",color('reset'),"\n";
-		}
+
+sub cmd_listscore() {
+    print "••• Game: $game\n";
+    for ( my $i = 0 ; $i < $players ; $i++ ) {
+        print "$players_list[$i]\n";
+        print $fh "••• Game: $game\n";
+        print "••••• ", color('bright_green'),
+          "$players_score[$i]", color('reset'), "\n";
+        print $fh "$players_list[$i] - ", color('bright_green'),
+          "$players_score[$i]", color('reset'), "\n";
+    }
 }
-sub cmd_endgame()
-{
-	cmd_listscore();
-	exit 1;
+
+sub cmd_endgame() {
+    cmd_listscore();
+    exit 1;
 }
+
 # prompt commands - needed for cmd_run
 sub prompt {
-    my ($query) = @_; # take a prompt string as argument
-    local $| = 1; # activate autoflush to immediately show the prompt 
+    my ($query) = @_;    # take a prompt string as argument
+    local $| = 1;        # activate autoflush to immediately show the prompt
     print $query;
-    chomp(my $answer = <STDIN>); return $answer;
+    chomp( my $answer = <STDIN> );
+    return $answer;
 }
+
 sub prompt_num {
-    NSTART:
+  NSTART:
     my ($querynum) = @_;
     print $querynum;
-    chomp(my $pnum = <STDIN>);
-    if (looks_like_number($pnum)) { return $pnum; }
+    chomp( my $pnum = <STDIN> );
+    if ( looks_like_number($pnum) ) { return $pnum; }
     else { print "Error: That is not a number. Try again.\n"; goto NSTART; }
 }
+
 sub prompt_yn {
     my ($queryyn) = @_;
     my $answer = prompt("$queryyn (y/N): ");
     return lc($answer) eq 'y';
 }
 
-cmd_run() unless defined $subname;
-my $sub = main->can("cmd_$subname") || main->can("tool_$subname") || main->can("hid_$subname");
-if (!defined($sub))
-{
-    print STDERR "Invalid command given.\nUse ",color('bright_green'),"./skore help",color('reset')," for a list of commands.\n";
-    exit 1;
-} else {
-    $sub->($ARGV[0]);
-    exit 0;
+if ($ARGV[0] = "") {
+	cmd_run();
 }
+elsif ($ARGV[0] = "help") { cmd_help(); }
+elsif ($ARGV[0] = "pkg") { tool_pkg(); }
+elsif ($ARGV[0] = "run") { cmd_run(); }
+elsif ($ARGV[0] = "last") { cmd_listscore(); }
