@@ -8,7 +8,8 @@ Added git branch 1.3-dev
  - changed @players_list to $players_list (line 39 only)
  - added retry trigger for res_init()
  - changed $subname to have $ARGV[0], instead of shift (and the conversion that followed)
- - 
+ - fixed res_init() elsif conditionals
+ - fixed cmd_run() quotes
  
 -- Version Skip: 1.2.2 -> 1.2
  - added option to make save file

@@ -26,8 +26,8 @@ sub cmd_run()
     print "•••••••••\n";
 	print "v",$version,"\n\nThis script tracks scores for players. \n\n";
     my $game = prompt("What game are we scoring?\n");
-	print $fh "--- Game ---\n",color('bright_green'),"$game",color('reset'),"\n--- Scores ---\n";
-    print "••• Game name locked: $game\n\n";
+	print $fh "--- Game ---\n",color('bright_green'),$game,color('reset'),"\n--- Scores ---\n";
+    print "••• Game name locked: ",$game,"\n\n";
     my $players = prompt_num("Enter total number of players:\n");
     my @players_list;
     for(my $i=0;$i<$players;$i++){
@@ -64,17 +64,17 @@ sub res_init()
 	print "S - enter scores for players\n";
 	print "L - list current scorecard\n";
 	print "Q - Quit the scorekeeper after displaying score totals.\n";
-	my @gcmd = prompt("Enter your command:");
-	if (@gcmd = "s") {
+	my $gcmd = prompt("Enter your command:");
+	if ($gcmd == "s") {
 		cmd_enterscore();
 		}
-	elsif (@gcmd = "l") {
+	elsif ($gcmd == "l") {
 		cmd_listscore();
 	}
-	elsif (@gcmd = "q") {
+	elsif ($gcmd == "q") {
 		cmd_endgame();
 	}
-	elsif (@gcmd = "") {
+	elsif ($gcmd == "") {
 		goto RETRY;
 }
 sub cmd_enterscore()
