@@ -34,9 +34,7 @@ sub cmd_run() {
     print "v", $version, "\n\nThis script tracks scores for players. \n\n";
     my $game = prompt("What game are we scoring?\n");
     print "*** Game name locked: ", $game, "\n\n";
-    my $players = prompt_num("Enter total number of players:\n");
-    my @players_list;
-
+    $players = prompt_num("Enter total number of players:\n");
     for ( my $i = 0 ; $i < $players ; $i++ ) {
         push( @players_list,
             prompt( "Enter Player " . ( $i + 1 ) . " name\n" ) );
@@ -93,6 +91,7 @@ sub res_init() {
     elsif ( $gcmd == "" ) {
         goto RETRY;
     }
+	my $gcmd = "";
 }
 
 sub cmd_enterscore() {
@@ -101,6 +100,7 @@ sub cmd_enterscore() {
         push( @players_score, prompt_num("score for $players_list[$i]?\n") );
     }
     print "\n";
+	res_init();
 }
 
 sub cmd_listscore() {
