@@ -15,14 +15,15 @@ my $game;
 my @players_list;
 my @players_score;
 my $subname;
-my $file   = "scores.txt";
+my $file = "scores.txt";
 
 # Options Parser
-GetOptions (
-	"file=s"   => \$file,        # set file name
-	"version"  => \&cmd_version, # run version
-	"help"     => \&cmd_help)    # run help
-	or die("Error in command line arguments\n");
+GetOptions(
+    "file=s"  => \$file,           # set file name
+    "version" => \&cmd_version,    # run version
+    "help"    => \&cmd_help        # run help
+  )
+  or die("Error in command line arguments\n");
 
 # Main command
 sub cmd_run() {
@@ -93,6 +94,7 @@ sub res_init() {
         goto RETRY;
     }
 }
+
 sub cmd_enterscore() {
     my @players_score;
     for ( my $i = 0 ; $i < $players ; $i++ ) {
@@ -100,6 +102,7 @@ sub cmd_enterscore() {
     }
     print "\n";
 }
+
 sub cmd_listscore() {
     print "+++ Game: $game\n";
     for ( my $i = 0 ; $i < $players ; $i++ ) {
@@ -111,6 +114,7 @@ sub cmd_listscore() {
           "$players_score[$i]", color('reset'), "\n";
     }
 }
+
 sub cmd_endgame() {
     cmd_listscore();
     exit 1;
@@ -124,6 +128,7 @@ sub prompt {
     chomp( my $answer = <STDIN> );
     return $answer;
 }
+
 sub prompt_num {
   NSTART:
     my ($querynum) = @_;
@@ -132,6 +137,7 @@ sub prompt_num {
     if ( looks_like_number($pnum) ) { return $pnum; }
     else { print "Error: That is not a number. Try again.\n"; goto NSTART; }
 }
+
 sub prompt_yn {
     my ($queryyn) = @_;
     my $answer = prompt("$queryyn (y/N): ");
