@@ -1,6 +1,6 @@
 -- TODO
  - add option to not save game/scores to file (ID: 001A)
- - add option to name score file on run (ID: 002A)
+ * add option to name score file on run (ID: 002A) 
 --------------------------------------------------------
 
 Added git branch 1.3-dev
@@ -10,6 +10,14 @@ Added git branch 1.3-dev
  - changed $subname to have $ARGV[0], instead of shift (and the conversion that followed)
  - fixed res_init() elsif conditionals
  - fixed cmd_run() quotes
+ - added Getopt::Long
+ * added option to define save file
+ - added 'version' option
+ - added 'help' option
+ - moved subcommands to be options
+ - tidied up subroutines
+ - removed junk
+ - switched oddball symbol to being +
  
 -- Version Skip: 1.2.2 -> 1.2
  - added option to make save file
