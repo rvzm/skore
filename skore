@@ -32,7 +32,7 @@ sub cmd_run() {
     print "+ ", color('cyan'), "skore", color('reset'), " +\n";
     print "+++++++++\n";
     print "v", $version, "\n\nThis script tracks scores for players. \n\n";
-    my $game = prompt("What game are we scoring?\n");
+    $game = prompt("What game are we scoring?\n");
     print "*** Game name locked: ", $game, "\n\n";
     $players = prompt_num("Enter total number of players:\n");
     for ( my $i = 0 ; $i < $players ; $i++ ) {
@@ -73,25 +73,22 @@ sub cmd_version() {
 
 # util
 sub res_init() {
-  RETRY:
-    print "The following commands can be used:\n";
-    print "S - enter scores for players\n";
-    print "L - list current scorecard\n";
-    print "Q - Quit the scorekeeper after displaying score totals.\n";
-    my $gcmd = prompt("Enter your command: ");
-    if ( $gcmd = "s" ) {
-        cmd_enterscore();
-    }
-    elsif ( $gcmd = "l" ) {
-        cmd_listscore();
-    }
-    elsif ( $gcmd = "q" ) {
-        cmd_endgame();
-    }
-    elsif ( $gcmd == "" ) {
-        goto RETRY;
-    }
-	my $gcmd = "";
+  while (i) {
+		print "The following commands can be used:\n";
+		print "S - enter scores for players\n";
+		print "L - list current scorecard\n";
+		print "Q - Quit the scorekeeper after displaying score totals.\n";
+		my $gcmd = prompt("Enter your command: ");
+		if ( $gcmd = "s" ) {
+			cmd_enterscore();
+		}
+		elsif ( $gcmd = "l" ) {
+			cmd_listscore();
+		}
+		elsif ( $gcmd = "q" ) {
+			cmd_endgame();
+		}
+	}
 }
 
 sub cmd_enterscore() {
