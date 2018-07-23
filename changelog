@@ -18,6 +18,9 @@ Added git branch 1.3-dev
  - tidied up subroutines
  - removed junk
  - switched oddball symbol to being +
+ - changed 'for ( my $i = 0 ; $i < $players ; $i++ )' to 'for my $i (0..$players)'
+ - removed () from subs
+ - removed string and warnings for dev branch
  
 -- Version Skip: 1.2.2 -> 1.2
  - added option to make save file

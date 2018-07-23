@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
-use strict;
-use warnings;
+#use strict;
+#use warnings;
 use Getopt::Long;
 use Term::ANSIColor;
 use Scalar::Util qw(looks_like_number);
@@ -9,7 +9,6 @@ use autodie;
 
 # basic variables
 my $version = "1.3";
-my $fh;
 my $players;
 my $game;
 my $gcmd;
@@ -27,7 +26,7 @@ GetOptions(
   or die("Error in command line arguments\n");
 
 # Main command
-sub cmd_run() {
+sub cmd_run {
     open FILE, '>', $file or die "Could not open file '$file' $!";
     print "+++++++++\n";
     print "+ ", color('cyan'), "skore", color('reset'), " +\n";
@@ -49,7 +48,7 @@ sub cmd_run() {
 }
 
 # help
-sub cmd_help() {
+sub cmd_help {
     print "Welcome to ", color('cyan'), "skore", color('reset'), "\n";
     print "To get right into using skore, simply type ", color('bright_green'),
       "./skore", color('reset'), "\n";
@@ -66,14 +65,14 @@ sub cmd_help() {
 }
 
 # version
-sub cmd_version() {
+sub cmd_version {
     print color('cyan'), "skore", color('reset'), " version: ", $version, "\n";
     print color('cyan'), "Perl ", color('reset');
     exec "perl -V:version";
 }
 
 # util
-sub res_init() {
+sub res_init {
   while (1) {
 		print "The following commands can be used:\n";
 		print "S - enter scores for players\n";
@@ -92,7 +91,7 @@ sub res_init() {
 	}
 }
 
-sub cmd_enterscore() {
+sub cmd_enterscore {
     my @players_score;
     for my $i (0..$players-1) {
         push( @players_score, prompt_num("score for $players_list[$i]?\n") );
@@ -102,21 +101,21 @@ sub cmd_enterscore() {
 	res_init();
 }
 
-sub cmd_listscore() {
-	my $game;
+sub cmd_listscore {
+	my @players_score;
     print "+++ Game:", $game,"\n";
-	print $fh "+++ Game: $game\n";
+	print FILE "+++ Game: $game\n";
     for my $i (0..$players-1) {
         print "$players_list[$i]\n";
         print "+++++ ", color('bright_green'),
           "$players_score[$i]", color('reset'), "\n";
-        print $fh "$players_list[$i] - ", color('bright_green'),
+        print FILE "$players_list[$i] - ", color('bright_green'),
           "$players_score[$i]", color('reset'), "\n";
     }
 	res_init();
 }
 
-sub cmd_endgame() {
+sub cmd_endgame {
     cmd_listscore();
     exit 1;
 }
